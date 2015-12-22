@@ -166,6 +166,15 @@ var huxian = {
     var keys = input.trimRight().split(' ');
     var verb = keys[0].toLowerCase();
     var restTerm = input.trimRight().slice(verb.length);
+    if (Object.keys(actionMap).indexOf(verb) > -1 && keys.length > 1){  
+      //verb is a action verb, parse the second term for provider
+      pedia = pedia.filter(function(element){
+        return element.startsWith(verb);
+      })
+      keys = restTerm.trim().split(' ');
+      verb = keys[0].toLowerCase();
+      restTerm = restTerm.trim().slice(verb.length);
+    }
     var results = pedia.filter(function(element) {
       return element.indexOf(verb) > -1;
     });
@@ -304,6 +313,12 @@ verbAddons.forEach(function(verb) {
   verb.providers.forEach(function(ele, idx) {
     searchPool.push(ele.name.toLowerCase());
     reverseMap[ele.name.toLowerCase()] = {
+      'name': ele.name,
+      'type': verb.actionVerb,
+      'idx': idx
+    };
+    searchPool.push(verb.actionVerb + " " + ele.name.toLowerCase());
+    reverseMap[verb.actionVerb + " " + ele.name.toLowerCase()] = {
       'name': ele.name,
       'type': verb.actionVerb,
       'idx': idx
